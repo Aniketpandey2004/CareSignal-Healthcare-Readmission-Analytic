@@ -1,0 +1,33 @@
+{
+  "model_name": "Random Forest",
+  "threshold": 0.48104127223505294,
+  "threshold_rule": "Maximum validation F1 among thresholds with recall >= 0.60",
+  "train_records": 81613,
+  "validation_records": 16255,
+  "test_records": 20153,
+  "train_patients": 57214,
+  "validation_patients": 11443,
+  "test_patients": 14304,
+  "patient_overlap_train_test": 0,
+  "features_used": 47,
+  "positive_rate_train": 0.11280065675811451,
+  "positive_rate_validation": 0.10679790833589664,
+  "positive_rate_test": 0.10673348881059892,
+  "sklearn_version": "1.5.1",
+  "metrics": {
+    "Model": "Random Forest",
+    "Threshold": 0.48104127223505294,
+    "Accuracy": 0.6219917630129509,
+    "Precision": 0.16513536689942424,
+    "Recall": 0.6266852626685263,
+    "F1": 0.2613922823346907,
+    "ROC_AUC": 0.6745589402200314,
+    "PR_AUC": 0.20853796496525712
+  },
+  "confusion_matrix": {
+    "TN": 11187,
+    "FP": 6815,
+    "FN": 803,
+    "TP": 1348
+  }
+}
