@@ -1,48 +1,77 @@
 # CareSignal — Healthcare Readmission Intelligence
 
-An academic machine-learning and analytics prototype for exploring historical 30-day hospital readmission patterns among diabetic patients.
+An academic machine-learning and analytics prototype for retrospective analysis of 30-day hospital readmission patterns among diabetic patients.
 
-> **Important:** This project is not a clinical diagnostic or treatment tool. It has not been prospectively or externally validated and must not be used to make patient-care decisions.
+> **Academic-use disclaimer:** CareSignal is an educational/research prototype. It is not a clinical diagnostic, prognostic, triage, discharge, treatment or care-allocation tool. Its outputs must not be used to make patient-care decisions. No external or prospective clinical validation has been performed.
 
-## What is included
+## Project scope
 
 - Encounter-level analytics dashboard built with Streamlit and Plotly.
 - Patient-grouped model training pipeline (`train_model.py`).
-- Notebook launcher (`notebooks/04_modeling.ipynb`).
-- Validation-based model comparison and decision-threshold selection.
-- Held-out patient-level evaluation reports.
-- Optional individual encounter scoring demonstration after the model has been trained.
+- Historical cohort analysis using the UCI Diabetes 130-US Hospitals dataset.
+- Model comparison, validation-only threshold selection and held-out patient-level evaluation.
+- Separate research analyses covering split strategy, calibration, bootstrap uncertainty, SHAP explanations and descriptive subgroup performance.
+
+The project is intended for **academic demonstration only**. The risk-scoring screen is a model-behaviour demonstration on a synthetic/hybrid input row: fields not explicitly edited are populated with typical values from the historical dataset. The displayed score is not a validated individual clinical probability.
 
 ## Dataset
 
-The project uses the UCI **Diabetes 130-US Hospitals for Years 1999–2008** dataset. It contains 101,766 hospital encounters and 71,518 unique patients in the source data. A row is an encounter, not a unique patient.
+The project uses the UCI **Diabetes 130-US Hospitals for Years 1999–2008** dataset. The source dataset contains 101,766 encounters and 71,518 unique patients. Each row represents a hospital encounter, not a unique patient.
 
 Target definition:
 
 - `readmitted == '<30'` → `readmitted_30 = 1`
 - `readmitted == 'NO'` or `'>30'` → `readmitted_30 = 0`
 
-The patient and encounter identifiers are excluded from model inputs. Patient identifiers are used only to group encounters during splitting.
+The patient and encounter identifiers are excluded from predictive inputs. Patient identifiers are used only to group encounters during splitting.
 
-## Project structure
+## Primary model and evaluation
 
-```text
-healthcare-readmission-analytics/
-├── app.py
-├── train_model.py
-├── requirements.txt
-├── data/
-│   ├── cleaned_healthcare_data.csv
-│   └── raw/diabetic_data_original.csv
-├── models/
-├── notebooks/
-│   ├── 01_data_understanding.ipynb
-│   ├── 02_eda.ipynb
-│   ├── 03_feature_engineering.ipynb
-│   ├── 04_modeling.ipynb
-│   └── 05_model_evaluation.ipynb
-└── reports/
-```
+The primary saved artifact is `models/healthcare_readmission_model.joblib`. Its accompanying metadata is `reports/training_metadata.json`. Older model artifacts are retained for historical traceability; do not assume they are interchangeable with the primary artifact.
+
+The documented primary patient-level holdout results are:
+
+| Metric | Result |
+|---|---:|
+| Test encounters | 20,153 |
+| Test patients | 14,304 |
+| Train/test patient overlap | 0 |
+| Features | 47 |
+| Threshold | 0.481041 |
+| Accuracy | 0.6220 |
+| Precision | 0.1651 |
+| Recall | 0.6267 |
+| F1-score | 0.2614 |
+| ROC-AUC | 0.6746 |
+| PR-AUC (average precision) | 0.2085 |
+
+Confusion matrix: TN=11,187; FP=6,815; FN=803; TP=1,348.
+
+The positive class prevalence in the test partition is approximately 10.67%. Precision is therefore important to interpret alongside recall; the selected operating point produces a substantial number of false-positive flags. The 60% validation-recall floor used for threshold selection is an exploratory project rule, not a clinically established requirement.
+
+### Evaluation design
+
+- Outer patient-grouped split: 80% training / 20% held-out test, `random_state=42`.
+- Inner patient-grouped validation split from the training partition, `random_state=21`.
+- Preprocessing is fitted within the scikit-learn pipeline.
+- Candidate models are compared on validation average precision (PR-AUC).
+- Threshold selection uses validation data only.
+- The held-out test partition is reserved for final evaluation.
+
+See `reports/training_metadata.json` and `reports/patient_level_final_metrics.csv` for the primary run's recorded values.
+
+## Research analyses
+
+A six-study analysis set has been completed in the project work:
+
+1. **Split strategy:** patient-grouped versus random encounter split. The random split had 7,001 patients shared across train and test, so it is not the preferred estimate of unseen-patient generalization.
+2. **Calibration comparison:** uncalibrated, sigmoid and isotonic probability calibration. Calibration improved Brier score and log loss in the separate calibration experiment, but changes score scale and requires threshold re-selection.
+3. **Patient-cluster bootstrap:** 1,000 valid patient-cluster bootstrap replicates for uncertainty intervals around ROC-AUC and PR-AUC.
+4. **Calibrated threshold optimization:** calibration fitting and threshold selection were separated into disjoint validation patient groups; the final test partition remained untouched.
+5. **SHAP explainability:** global and individual model explanations on a sample of the patient-level test data. SHAP values describe model associations, not causal effects.
+6. **Subgroup performance:** descriptive performance by age, gender and recorded race on the original patient-level test partition. Small subgroup counts and positive counts require caution.
+
+**Reproducibility note:** the current GitHub tree does not yet contain the six experiment source scripts and their full output bundle. The analyses and numerical summaries are recorded in the project handover context, but the experiment code and generated artefacts must be added and rerun from the project environment before claiming that this repository alone fully reproduces all six studies. See `reports/RESEARCH_AUDIT_SUMMARY.md` for the detailed summary and limitations.
 
 ## Setup (Mac / Windows)
 
@@ -50,26 +79,18 @@ Python 3.11 or 3.12 is recommended. From the project root:
 
 ```bash
 python3 -m venv .venv
-source .venv/bin/activate        # Windows: .venv\\Scripts\\activate
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-## Train the model
-
-Option A — terminal:
+## Train the primary model
 
 ```bash
 python train_model.py
 ```
 
-Option B — VS Code:
-
-1. Open `notebooks/04_modeling.ipynb`.
-2. Select the Python environment where project requirements were installed.
-3. Click **Run All**.
-
-The training pipeline writes `models/healthcare_readmission_model.joblib` and the patient-level reports in `reports/`.
+The training pipeline writes `models/healthcare_readmission_model.joblib` and primary patient-level reports in `reports/`. Training may take time because the dataset contains over 100,000 encounters.
 
 ## Run the dashboard
 
@@ -77,42 +98,25 @@ The training pipeline writes `models/healthcare_readmission_model.joblib` and th
 streamlit run app.py
 ```
 
-The dashboard has five sections:
-
-1. Executive Overview — cohort KPIs and outcome distribution.
-2. Population Insights — descriptive comparisons by recorded demographics and utilization.
-3. Model Performance — validation comparison, holdout metrics, confusion matrix and feature importance.
-4. Risk Scoring Demo — a form that uses the saved model artifact and full expected feature schema.
-5. Methodology — target definition, split strategy, limitations and responsible-use notes.
-
-## Evaluation approach
-
-- A patient-grouped train/test split prevents encounters from the same patient crossing the train/test boundary.
-- A second grouped split within training data creates a validation partition.
-- Preprocessing is fitted within a scikit-learn pipeline to reduce preprocessing leakage.
-- Candidate models are compared on validation average precision (PR-AUC).
-- The operating threshold is selected using validation data only. A 60% recall floor is an exploratory project rule, not a clinically established requirement.
-- The final test partition is evaluated once after model selection.
-
-Reported metrics include precision, recall, F1, ROC-AUC and PR-AUC. Because the positive class is relatively uncommon, accuracy alone is not an adequate summary.
+The dashboard includes cohort overview, population insights, model performance, an academic risk-scoring demonstration and methodology/limitations. In the scoring demonstration, unedited fields are populated from historical dataset medians/modes; users must not interpret the resulting score as an actual patient's clinical risk.
 
 ## Model artifact compatibility
 
-Scikit-learn does not guarantee that serialized models are portable across library versions. This repository pins `scikit-learn==1.5.1` to match the supplied model-generation environment. If a model-load error occurs, install the requirements and rerun `train_model.py` to recreate the artifact in that environment.
+Scikit-learn does not guarantee that serialized models are portable across library versions. This repository pins `scikit-learn==1.5.1` to match the recorded model-generation environment. Install the pinned requirements before loading the supplied artifact. Re-training will regenerate the primary artifact and may change outputs if the data, code, dependency environment or randomization settings differ.
 
-## Limitations and ethics
+## Limitations and responsible use
 
-- Historical data (1999–2008) may not represent modern clinical practice.
-- The cohort is US-based and diabetes-focused; transfer to Indian hospitals or other populations is unproven.
-- This is encounter-level prediction, not a longitudinal patient-level clinical assessment.
-- No external validation, prospective validation, calibration study, fairness audit or clinical utility study is claimed.
-- Model feature importance is predictive association, not causal explanation.
-- False positives and false negatives both have operational consequences.
-- Any real-world use would require clinical governance, privacy/security review, external validation, prospective evaluation, monitoring and human oversight.
+- The data are historical (1999–2008), US-based and diabetes-focused.
+- Transfer to current hospitals, other populations or Indian healthcare settings is unproven.
+- The outcome is an encounter-level retrospective label, not a prospective clinical endpoint.
+- There is no external, temporal or prospective validation.
+- Calibration experiments are separate model-development analyses and do not replace the primary saved model's evaluation.
+- Subgroup metrics are descriptive; they do not establish fairness, discrimination or statistical significance.
+- SHAP and feature-importance values indicate model behaviour/association, not causation.
+- False positives and false negatives are both substantial at the selected operating point.
+- No clinical utility, decision-impact or deployment study has been performed.
 
-## Suggested research direction
-
-A defensible study can investigate how patient-grouped evaluation changes estimated performance compared with encounter-random evaluation, and how threshold selection changes precision/recall trade-offs. A literature review is needed before claiming novelty.
+Any future clinical research or deployment would require independent external validation, prospective evaluation, calibration assessment, adequate subgroup sample sizes, clinical governance, privacy/security review, monitoring and qualified human oversight.
 
 ## Citation
 
