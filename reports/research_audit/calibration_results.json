@@ -1,0 +1,12 @@
+{
+  "test_encounters": 20153,
+  "test_patients": 14304,
+  "shared_patients_train_test": 0,
+  "test_positive_rate": 0.10673348881059892,
+  "brier_score": 0.23254358043184564,
+  "log_loss": 0.657755131453367,
+  "calibration_bins": 5,
+  "model_name": "Random Forest",
+  "saved_threshold": 0.48104127223505294,
+  "note": "Evaluation only. No recalibration or model fitting was performed. Lower Brier score and log loss are better; compare Brier scores against the test-set positive-rate baseline before drawing conclusions."
+}

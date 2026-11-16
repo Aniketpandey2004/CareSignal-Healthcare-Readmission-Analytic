@@ -1,0 +1,48 @@
+{
+  "experiment": "Validation-only probability calibration",
+  "dataset_rows": 101766,
+  "feature_count": 47,
+  "unique_patients": 71518,
+  "subtrain_encounters": 65358,
+  "validation_encounters": 16255,
+  "test_encounters": 20153,
+  "subtrain_patients": 45771,
+  "validation_patients": 11443,
+  "test_patients": 14304,
+  "patient_overlap": 0,
+  "test_positive_rate": 0.10673348881059892,
+  "saved_threshold_used_for_reference": 0.48104127223505294,
+  "results": [
+    {
+      "method": "Uncalibrated",
+      "brier_score": 0.21404967604132427,
+      "log_loss": 0.6193387469737371,
+      "roc_auc": 0.6738245572280285,
+      "pr_auc": 0.2072989412642475,
+      "precision_at_saved_threshold": 0.16463030608388965,
+      "recall_at_saved_threshold": 0.6076243607624361,
+      "f1_at_saved_threshold": 0.25906838453914766
+    },
+    {
+      "method": "Sigmoid",
+      "brier_score": 0.09136036859768677,
+      "log_loss": 0.32065137086186235,
+      "roc_auc": 0.6738245572280285,
+      "pr_auc": 0.2072989412642475,
+      "precision_at_saved_threshold": 0.0,
+      "recall_at_saved_threshold": 0.0,
+      "f1_at_saved_threshold": 0.0
+    },
+    {
+      "method": "Isotonic",
+      "brier_score": 0.0914280318763286,
+      "log_loss": 0.3219455988519923,
+      "roc_auc": 0.6729609205568409,
+      "pr_auc": 0.19571108192903952,
+      "precision_at_saved_threshold": 0.6666666666666666,
+      "recall_at_saved_threshold": 0.0009298000929800093,
+      "f1_at_saved_threshold": 0.0018570102135561746
+    }
+  ],
+  "methodology_note": "The original preprocessing and patient-level split strategy were reproduced. A fresh copy of the saved pipeline was fitted on grouped sub-training patients only. Sigmoid and isotonic calibrators were fitted using grouped validation predictions only. The patient-level test partition was untouched until final evaluation. The saved model artifact and Streamlit dashboard were not modified. The saved threshold is used only as a reference because calibration can change probability scale."
+}

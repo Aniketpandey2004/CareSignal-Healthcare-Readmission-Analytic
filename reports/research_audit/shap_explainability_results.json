@@ -1,0 +1,97 @@
+{
+  "experiment": "SHAP Explainability Analysis",
+  "dataset_rows": 101766,
+  "original_feature_count": 47,
+  "transformed_feature_count": 1306,
+  "test_encounters": 20153,
+  "test_patients": 14304,
+  "patient_overlap": 0,
+  "shap_sample_size": 500,
+  "explained_encounter_position_in_test": 11195,
+  "explained_patient_nbr": 42522309,
+  "explained_readmission_target": 1,
+  "explained_predicted_probability": 0.6341369283247609,
+  "top_20_features": [
+    {
+      "feature": "numeric__number_inpatient",
+      "mean_absolute_shap": 0.025066157603169395
+    },
+    {
+      "feature": "categorical__discharge_disposition_id_1",
+      "mean_absolute_shap": 0.017200054500883535
+    },
+    {
+      "feature": "numeric__number_diagnoses",
+      "mean_absolute_shap": 0.007661655375115079
+    },
+    {
+      "feature": "numeric__number_emergency",
+      "mean_absolute_shap": 0.007060392877422358
+    },
+    {
+      "feature": "numeric__num_medications",
+      "mean_absolute_shap": 0.006445881629239378
+    },
+    {
+      "feature": "categorical__discharge_disposition_id_3",
+      "mean_absolute_shap": 0.006041741919570342
+    },
+    {
+      "feature": "numeric__time_in_hospital",
+      "mean_absolute_shap": 0.006039173408370515
+    },
+    {
+      "feature": "categorical__insulin_No",
+      "mean_absolute_shap": 0.005608715082135527
+    },
+    {
+      "feature": "categorical__diabetesMed_No",
+      "mean_absolute_shap": 0.004267192089345959
+    },
+    {
+      "feature": "categorical__discharge_disposition_id_22",
+      "mean_absolute_shap": 0.0040865371193967385
+    },
+    {
+      "feature": "categorical__age_[50-60)",
+      "mean_absolute_shap": 0.003962767666725707
+    },
+    {
+      "feature": "categorical__payer_code_MC",
+      "mean_absolute_shap": 0.003960421146630112
+    },
+    {
+      "feature": "categorical__diag_3_250",
+      "mean_absolute_shap": 0.0037817706002109463
+    },
+    {
+      "feature": "categorical__diabetesMed_Yes",
+      "mean_absolute_shap": 0.003703338035895795
+    },
+    {
+      "feature": "numeric__number_outpatient",
+      "mean_absolute_shap": 0.003334483798486811
+    },
+    {
+      "feature": "categorical__metformin_No",
+      "mean_absolute_shap": 0.0032955142651749326
+    },
+    {
+      "feature": "categorical__discharge_disposition_id_11",
+      "mean_absolute_shap": 0.003230801599250857
+    },
+    {
+      "feature": "numeric__num_lab_procedures",
+      "mean_absolute_shap": 0.0030533082427415077
+    },
+    {
+      "feature": "categorical__diag_2_250",
+      "mean_absolute_shap": 0.002627506632396469
+    },
+    {
+      "feature": "categorical__metformin_Steady",
+      "mean_absolute_shap": 0.0024867073837578947
+    }
+  ],
+  "methodology_note": "SHAP TreeExplainer was applied to the classifier inside the existing saved Random Forest pipeline. The saved preprocessing pipeline transformed the patient-level test sample. No model retraining was performed. Global feature importance was calculated using mean absolute SHAP values. A high-risk sample encounter was selected for a local waterfall explanation. SHAP values describe model prediction contributions and do not establish causality or clinical relationships."
+}

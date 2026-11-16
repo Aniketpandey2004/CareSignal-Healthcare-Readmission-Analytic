@@ -1,0 +1,2 @@
+sample_size,positive_cases,negative_cases,actual_positive_rate,predicted_positive_rate,accuracy,precision,recall,f1_score,roc_auc,pr_auc,brier_score,specificity,false_positive_rate,true_positives,false_positives,true_negatives,false_negatives,subgroup,category
+20153,2151,18002,0.10673348881059892,0.40505135711804696,0.6219917630129509,0.16513536689942424,0.6266852626685263,0.2613922823346907,0.6745589402200314,0.20853796496525712,0.21597354469863111,0.6214309521164315,0.3785690478835685,1348,6815,11187,803,Overall,All test encounters

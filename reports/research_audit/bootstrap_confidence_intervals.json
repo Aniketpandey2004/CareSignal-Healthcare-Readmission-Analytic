@@ -1,0 +1,17 @@
+{
+    "method": "Patient-cluster bootstrap",
+    "bootstrap_replicates_requested": 1000,
+    "bootstrap_replicates_valid": 1000,
+    "test_encounters": 20153,
+    "test_patients": 14304,
+    "roc_auc": {
+        "point_estimate": 0.6745589402200314,
+        "ci_95_lower": 0.6603170378468697,
+        "ci_95_upper": 0.6863820977630867
+    },
+    "pr_auc": {
+        "point_estimate": 0.20853796496525712,
+        "ci_95_lower": 0.19017151511662686,
+        "ci_95_upper": 0.22710155111389507
+    }
+}

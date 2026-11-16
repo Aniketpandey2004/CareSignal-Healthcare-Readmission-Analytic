@@ -1,0 +1,62 @@
+{
+  "minimum_validation_recall_target": 0.6,
+  "validation_design": "Separate patient groups for calibration fitting and threshold selection",
+  "patient_overlap_between_all_partitions": 0,
+  "test_encounters": 20153,
+  "test_patients": 14304,
+  "test_positive_rate": 0.10673348881059892,
+  "results": [
+    {
+      "method": "Uncalibrated",
+      "selected_threshold": 0.48270013763936004,
+      "validation_recall_constraint_met": true,
+      "validation_positive_rate": 0.10425716768027801,
+      "test_brier_score": 0.21386920121981823,
+      "test_log_loss": 0.6189560366626234,
+      "test_roc_auc": 0.6739901723817968,
+      "test_pr_auc": 0.21001535180134545,
+      "test_precision": 0.16826370256803372,
+      "test_recall": 0.6122733612273361,
+      "test_f1": 0.2639807576668671,
+      "test_tn": 11492,
+      "test_fp": 6510,
+      "test_fn": 834,
+      "test_tp": 1317
+    },
+    {
+      "method": "Sigmoid",
+      "selected_threshold": 0.11444703396191953,
+      "validation_recall_constraint_met": true,
+      "validation_positive_rate": 0.10425716768027801,
+      "test_brier_score": 0.09131574951023327,
+      "test_log_loss": 0.3206677665782518,
+      "test_roc_auc": 0.6739901723817968,
+      "test_pr_auc": 0.21001535180134545,
+      "test_precision": 0.16826370256803372,
+      "test_recall": 0.6122733612273361,
+      "test_f1": 0.2639807576668671,
+      "test_tn": 11492,
+      "test_fp": 6510,
+      "test_fn": 834,
+      "test_tp": 1317
+    },
+    {
+      "method": "Isotonic",
+      "selected_threshold": 0.11666666666666667,
+      "validation_recall_constraint_met": true,
+      "validation_positive_rate": 0.10425716768027801,
+      "test_brier_score": 0.09139643122639256,
+      "test_log_loss": 0.3227298446820408,
+      "test_roc_auc": 0.6718637492161496,
+      "test_pr_auc": 0.19659995046448764,
+      "test_precision": 0.16811335205514424,
+      "test_recall": 0.6122733612273361,
+      "test_f1": 0.26379569354031046,
+      "test_tn": 11485,
+      "test_fp": 6517,
+      "test_fn": 834,
+      "test_tp": 1317
+    }
+  ],
+  "methodology_note": "The base pipeline was fitted on sub-training data only. Calibration was fitted on a separate calibration-fit subset of validation patients. Thresholds were selected on a disjoint validation subset by maximizing F1 subject to recall >= 0.60. The test set was not used for fitting, calibration, threshold selection, or method selection. Results are research evaluation only; no saved model or deployed app was changed."
+}

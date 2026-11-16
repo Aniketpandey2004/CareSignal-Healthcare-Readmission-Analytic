@@ -1,0 +1,119 @@
+{
+  "experiment": "Validation-only calibrated threshold optimization",
+  "dataset_rows": 101766,
+  "feature_count": 47,
+  "unique_patients": 71518,
+  "minimum_validation_recall_constraint": 0.6,
+  "subtrain_encounters": 65358,
+  "calibration_fit_encounters": 8198,
+  "threshold_validation_encounters": 8057,
+  "test_encounters": 20153,
+  "subtrain_patients": 45771,
+  "calibration_fit_patients": 5721,
+  "threshold_validation_patients": 5722,
+  "test_patients": 14304,
+  "patient_overlap": 0,
+  "validation_thresholds": {
+    "Uncalibrated": {
+      "threshold": 0.4810444205892355,
+      "validation_precision": 0.16521176850953767,
+      "validation_recall": 0.6083333333333333,
+      "validation_f1": 0.25985252987507723
+    },
+    "Sigmoid": {
+      "threshold": 0.11295869705459549,
+      "validation_precision": 0.16521176850953767,
+      "validation_recall": 0.6083333333333333,
+      "validation_f1": 0.25985252987507723
+    },
+    "Isotonic": {
+      "threshold": 0.1087136929460581,
+      "validation_precision": 0.14873665016931492,
+      "validation_recall": 0.6797619047619048,
+      "validation_f1": 0.24406924556499715
+    }
+  },
+  "test_results": [
+    {
+      "method": "Uncalibrated",
+      "threshold": 0.4810444205892355,
+      "brier_score": 0.21404967604132427,
+      "log_loss": 0.6193387469737371,
+      "accuracy": 0.6290378603681834,
+      "precision": 0.16463030608388965,
+      "recall": 0.6076243607624361,
+      "f1": 0.25906838453914766,
+      "roc_auc": 0.6738245572280285,
+      "pr_auc": 0.2072989412642475,
+      "true_negatives": 11370,
+      "false_positives": 6632,
+      "false_negatives": 844,
+      "true_positives": 1307,
+      "validation_precision": 0.16521176850953767,
+      "validation_recall": 0.6083333333333333,
+      "validation_f1": 0.25985252987507723
+    },
+    {
+      "method": "Sigmoid",
+      "threshold": 0.11295869705459549,
+      "brier_score": 0.0913560218724445,
+      "log_loss": 0.32065577460022704,
+      "accuracy": 0.6290378603681834,
+      "precision": 0.16463030608388965,
+      "recall": 0.6076243607624361,
+      "f1": 0.25906838453914766,
+      "roc_auc": 0.6738245572280285,
+      "pr_auc": 0.2072989412642475,
+      "true_negatives": 11370,
+      "false_positives": 6632,
+      "false_negatives": 844,
+      "true_positives": 1307,
+      "validation_precision": 0.16521176850953767,
+      "validation_recall": 0.6083333333333333,
+      "validation_f1": 0.25985252987507723
+    },
+    {
+      "method": "Isotonic",
+      "threshold": 0.1087136929460581,
+      "brier_score": 0.09136727749252478,
+      "log_loss": 0.32183426132085174,
+      "accuracy": 0.5633404455912271,
+      "precision": 0.15602690118986032,
+      "recall": 0.701069270106927,
+      "f1": 0.25524712254570076,
+      "roc_auc": 0.6726862338917764,
+      "pr_auc": 0.19446945251830633,
+      "true_negatives": 9845,
+      "false_positives": 8157,
+      "false_negatives": 643,
+      "true_positives": 1508,
+      "validation_precision": 0.14873665016931492,
+      "validation_recall": 0.6797619047619048,
+      "validation_f1": 0.24406924556499715
+    }
+  ],
+  "confusion_matrices": {
+    "Uncalibrated": {
+      "threshold": 0.4810444205892355,
+      "TN": 11370,
+      "FP": 6632,
+      "FN": 844,
+      "TP": 1307
+    },
+    "Sigmoid": {
+      "threshold": 0.11295869705459549,
+      "TN": 11370,
+      "FP": 6632,
+      "FN": 844,
+      "TP": 1307
+    },
+    "Isotonic": {
+      "threshold": 0.1087136929460581,
+      "TN": 9845,
+      "FP": 8157,
+      "FN": 643,
+      "TP": 1508
+    }
+  },
+  "methodology_note": "The original preprocessing and patient-level split strategy were reproduced. The saved pipeline was cloned and fitted only on sub-training patients. The validation partition was divided into disjoint patient groups for calibration fitting and threshold optimization. Sigmoid and isotonic calibrators were fitted only on calibration-fit patients. Thresholds were selected on separate threshold-validation patients by maximizing F1 subject to recall >= 0.60. The test partition was used only for final evaluation. The original saved model and dashboard were not modified."
+}
